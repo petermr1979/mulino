@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Табло выдачи заказов</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0d0f14">
+
+  <!-- iOS / iPhone standalone -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Табло">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <!-- ===== Основное табло 16:9 ===== -->
+    <div class="board" id="board">
+      <div class="board__topbar">
+        <div class="board__brand">
+          <span class="board__dot"></span>
+          <span class="board__brand-name">Вкусно&nbsp;·&nbsp;и точка</span>
+        </div>
+        <div class="board__clock" id="clock">12:00</div>
+      </div>
+
+      <div class="board__columns">
+        <!-- Колонка "ГОТОВИТСЯ" -->
+        <section class="col col--preparing">
+          <header class="col__header col__header--preparing">
+            <span class="col__icon">&#9203;</span>
+            <span class="col__label">Готовится</span>
+          </header>
+          <ul class="order-list order-list--preparing" id="preparingList"></ul>
+        </section>
+
+        <!-- Колонка "ГОТОВО" -->
+        <section class="col col--ready">
+          <header class="col__header col__header--ready">
+            <span class="col__icon">&#10003;</span>
+            <span class="col__label">Готово</span>
+          </header>
+          <ul class="order-list order-list--ready" id="readyList"></ul>
+        </section>
+      </div>
+
+      <!-- ===== Нижняя панель (открывается во время анимации) ===== -->
+      <div class="stage" id="stage">
+        <div class="stage__veil"></div>
+
+        <div class="stage__body">
+          <div class="stage-order" id="stageOrder">
+            <div class="stage-order__label">Заказ</div>
+            <div class="stage-order__number" id="stageOrderNum">№125</div>
+          </div>
+
+          <div class="slide-viewport" id="slideViewport"></div>
+
+          <div class="stage-order stage-order--right" id="stageOrderRight">
+            <div class="stage-order__label">Заказ</div>
+            <div class="stage-order__number" id="stageOrderNumRight">№125</div>
+          </div>
+        </div>
+
+        <div class="stage__caption" id="stageCaption"></div>
+
+        <div class="progress" id="progress">
+          <div class="progress__fill" id="progressFill"></div>
+          <div class="progress__label" id="progressLabel"></div>
+        </div>
+      </div>
+
+      <div class="board__footer">
+        <span class="board__hint">Заказы выдаются на стойке выдачи</span>
+        <span class="board__logo-mark">WS&nbsp;·&nbsp;Y&nbsp;·&nbsp;T</span>
+      </div>
+    </div>
+
+    <!-- ===== Вертикальное меню управления (кнопки-символы справа) ===== -->
+    <div class="controls" id="controls">
+      <div class="controls__inner">
+        <button class="tab tab--run" id="btnRun" aria-label="Запустить" title="Запустить">
+          <span class="tab__icon">&#9654;</span>
+        </button>
+        <button class="tab tab--next" id="btnNext" aria-label="Следующий" title="Следующий">
+          <span class="tab__icon">&#9197;</span>
+        </button>
+        <button class="tab tab--reset" id="btnReset" aria-label="Сброс" title="Сброс">
+          <span class="tab__icon">&#8634;</span>
+        </button>
+      </div>
+      <div class="controls__status" id="statusText">Обычный режим</div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/stations.js"></script>
+  <script src="js/character.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/demo.js"></script>
+
+  <!-- Регистрация service worker (офлайн) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW registration failed', err));
+      });
+    }
+  </script>
+</body>
+</html>
